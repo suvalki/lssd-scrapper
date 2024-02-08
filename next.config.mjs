@@ -2,7 +2,7 @@
 const nextConfig = {
     experimental: {
         optimizePackageImports: [
-            "@mantine/*",
+            "@mantine/core",
             "@tanstack/react-query",
         ]
     }
