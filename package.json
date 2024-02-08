@@ -12,6 +12,7 @@
     "@hookform/resolvers": "^3.3.4",
     "@mantine/core": "^7.5.1",
     "@mantine/hooks": "^7.5.1",
+    "@sparticuz/chromium": "^121.0.0",
     "@tanstack/react-query": "^5.18.1",
     "autoprefixer": "^10.4.17",
     "lucide-react": "^0.323.0",
