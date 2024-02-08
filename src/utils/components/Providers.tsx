@@ -13,7 +13,7 @@ const theme = createTheme({
 
     }
 })
-export const Providers: React.FC<{ children: React.ReactNode }> = ({children}) => {
+export default function Providers({children}: { children: React.ReactNode }) {
     const queryClient = new QueryClient()
     return (
         <>

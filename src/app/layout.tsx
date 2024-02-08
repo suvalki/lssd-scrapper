@@ -1,10 +1,10 @@
 import '@mantine/core/styles.css';
 
 import {ColorSchemeScript} from '@mantine/core';
-import {Providers} from "@/utils/components/Providers";
+import Providers from "@/utils/components/Providers";
 
 export const metadata = {
-    title: "Почта"
+    title: "Почта",
 }
 
 export default function RootLayout({children}: {
@@ -13,11 +13,8 @@ export default function RootLayout({children}: {
     return (
         <html lang="en">
 
-        <head>
-            <ColorSchemeScript/>
-        </head>
-
         <body>
+        <ColorSchemeScript/>
         <Providers>{children}</Providers>
         </body>
         </html>
