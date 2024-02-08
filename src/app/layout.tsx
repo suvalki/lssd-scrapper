@@ -27,11 +27,13 @@ export default function RootLayout({children}: {
 
         <body>
         <ColorSchemeScript/>
-        <QueryClientProvider client={queryClient}>
+
             <MantineProvider theme={theme} defaultColorScheme={"dark"}>
-                {children}
+                <QueryClientProvider client={queryClient}>
+                    {children}
+                </QueryClientProvider>
             </MantineProvider>
-        </QueryClientProvider>
+
         </body>
         </html>
     );
