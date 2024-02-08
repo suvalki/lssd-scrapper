@@ -18,18 +18,20 @@ export async function POST(request: Request) {
     });
     const page = await browser.newPage();
 
-    // await page.goto("https://lssd.gtaw.me/ucp.php?mode=login&redirect=index.php");
-    // await page.locator("[name='username']").fill("William Foger")
-    // await page.locator("[name='password']").fill("19112007lL")
-    // await page.locator("[name='autologin']").click()
-    //
-    // await page.locator("[name='login']").click()
+    await page.goto("https://lssd.gtaw.me/ucp.php?mode=login&redirect=index.php");
+    await page.locator("[name='username']").fill("William Foger")
+    await page.locator("[name='password']").fill("19112007lL")
+    await page.locator("[name='autologin']").click()
 
-    await page.setCookie({
-        name: "phpbb3_enlax_sid",
-        value: "7305d73f232b02af7f3f61d2cbe5b97f",
-        domain: ".lssd.gtaw.me"
-    })
+    await page.locator("[name='login']").click()
+
+    await page.waitForNavigation()
+
+    // await page.setCookie({
+    //     name: "phpbb3_enlax_sid",
+    //     value: "7305d73f232b02af7f3f61d2cbe5b97f",
+    //     domain: ".lssd.gtaw.me"
+    // })
 
     await page.goto("https://lssd.gtaw.me/")
 
