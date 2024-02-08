@@ -13,7 +13,9 @@ export async function POST(request: Request) {
     }
 
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        args: ["--no-sandbox"]
+    });
     const page = await browser.newPage();
 
     // await page.goto("https://lssd.gtaw.me/ucp.php?mode=login&redirect=index.php");
