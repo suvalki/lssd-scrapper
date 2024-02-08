@@ -1,18 +1,14 @@
+"use client";
 import '@mantine/core/styles.css';
 
 import {ColorSchemeScript, createTheme, MantineProvider} from '@mantine/core';
 import Providers from "@/utils/components/Providers";
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import React from "react";
 
-export const metadata = {
-    title: "Почта",
-}
 
-export default function RootLayout({children}: {
+export default async function RootLayout({children}: {
     children: React.ReactNode;
 }) {
-    const queryClient = new QueryClient()
     const theme = createTheme({
 
         primaryColor: "green",
@@ -24,16 +20,15 @@ export default function RootLayout({children}: {
 
     return (
         <html lang="en">
-
+        <head>
+            <title>Почта</title>
+            <ColorSchemeScript/>
+        </head>
         <body>
-        <ColorSchemeScript/>
 
             <MantineProvider theme={theme} defaultColorScheme={"dark"}>
-                <QueryClientProvider client={queryClient}>
-                    {children}
-                </QueryClientProvider>
+                <Providers>{children}</Providers>
             </MantineProvider>
-
         </body>
         </html>
     );
