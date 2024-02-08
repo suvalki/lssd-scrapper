@@ -2,9 +2,9 @@
 
 import {Flex, SegmentedControl, Stack, Title} from "@mantine/core";
 import {useState} from "react";
-import {LoginForm} from "@/pages/forms/login-forms/LoginForm";
+import LoginForm from "@/pages/forms/login-forms/LoginForm";
 import {Mail} from "lucide-react";
-import {InviteForm} from "@/pages/forms/login-forms/InviteForm";
+import InviteForm from "@/pages/forms/login-forms/InviteForm";
 
 export default function Page() {
 

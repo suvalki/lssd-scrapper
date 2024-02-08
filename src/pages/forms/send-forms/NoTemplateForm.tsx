@@ -7,7 +7,7 @@ import {noTemplateFormSchema} from "@/schemas/send-forms";
 import {InferType} from "yup";
 import {Whisper} from "next/dist/compiled/@next/font/dist/google";
 
-export const NoTemplateForm:React.FC = () => {
+export default function NoTemplateForm()  {
 
     const {mutate, isPending} = useMutation({
         mutationKey: ["sendEmail"],

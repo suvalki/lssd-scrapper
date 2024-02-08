@@ -2,7 +2,7 @@ import React from "react"
 import {Button, Stack, TextInput} from "@mantine/core";
 import {Key} from "lucide-react";
 
-export const InviteForm:React.FC = () => {
+export default function InviteForm () {
     return (
         <div style={{
             width: "100%",

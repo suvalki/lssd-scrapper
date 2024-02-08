@@ -2,7 +2,7 @@ import React from "react"
 import {Button, Divider, Flex, Grid, Select, Stack, Textarea, TextInput} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 
-export const TemplateForm: React.FC = () => {
+export default function TemplateForm() {
 
     const match = useMediaQuery("( max-width: 992px )");
 

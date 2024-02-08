@@ -1,9 +1,9 @@
 "use client";
 import {PageHeader} from "@/components/pages/PageHeader";
 import {Card, Flex, SegmentedControl, Stack} from "@mantine/core";
-import {TemplateForm} from "@/pages/forms/send-forms/TemplateForm";
+import TemplateForm from "@/pages/forms/send-forms/TemplateForm";
 import React, {useState} from "react";
-import {NoTemplateForm} from "@/pages/forms/send-forms/NoTemplateForm";
+import NoTemplateForm from "@/pages/forms/send-forms/NoTemplateForm";
 import {useMediaQuery} from "@mantine/hooks";
 
 export default function Page() {

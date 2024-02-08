@@ -2,7 +2,7 @@ import React from "react"
 import {Button, Stack, TextInput} from "@mantine/core";
 import {Lock, User} from "lucide-react";
 
-export const LoginForm:React.FC = () => {
+export default function LoginForm() {
     return (
         <div style={{
             width: "100%",
