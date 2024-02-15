@@ -22,6 +22,8 @@ export async function POST(request: Request) {
 
         // await page.goto("https://lssd.gtaw.me/ucp.php?mode=login&redirect=index.php");
 
+        await page.setDefaultNavigationTimeout(120000);
+
         await page.setCookie({
             name: "phpbb3_enlax_sid",
             // @ts-ignore

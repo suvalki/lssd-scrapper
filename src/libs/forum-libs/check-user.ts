@@ -24,14 +24,15 @@ export const checkForumUser = async (user: User) => {
 
             const page = await browser.newPage();
 
-            page.setCookie({
+            await page.setDefaultNavigationTimeout(120000);
+
+            await page.setCookie({
                 name: "phpbb3_enlax_sid",
                 // @ts-ignore
                 value: active.sid,
                 domain: ".lssd.gtaw.me"
             })
 
-            console.log(active)
 
             await page.goto("https://lssd.gtaw.me/index.php");
 
