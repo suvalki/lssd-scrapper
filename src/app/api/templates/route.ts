@@ -3,7 +3,6 @@ import {NextResponse} from "next/server";
 import {PrismaClient} from "@prisma/client";
 // @ts-ignore
 import jwt from "jsonwebtoken";
-import {checkAccount} from "@/libs/forum-libs/check-account";
 
 export async function GET(req: Request) {
     const user = await userAccess()
