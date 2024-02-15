@@ -174,6 +174,7 @@ export default function TemplateForm() {
                                             instance: el,
                                             value: field.value,
                                             onChange: field.onChange,
+                                            // @ts-ignore
                                             error: errors[el.uid + "-field"]?.message
                                         })) as ReactElement<any, string | JSXElementConstructor<any>>}
                                                 name={`${el.uid}-field`}
