@@ -26,6 +26,7 @@ export const checkForumUser = async (user: User) => {
 
             page.setCookie({
                 name: "phpbb3_enlax_sid",
+                // @ts-ignore
                 value: active.sid,
                 domain: ".lssd.gtaw.me"
             })
@@ -55,6 +56,7 @@ export const checkForumUser = async (user: User) => {
                             id: active.id
                         },
                         data: {
+                            // @ts-ignore
                             sid: cookie.filter((el) => el.name === "phpbb3_enlax_sid")[0].value
                         }
                     })

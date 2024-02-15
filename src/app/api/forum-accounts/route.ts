@@ -42,6 +42,7 @@ export async function POST(req: Request) {
                     createdId: user.id,
                     password: body.password,
                     active: false,
+                    // @ts-ignore
                     sid: hasAccount
                 },
             })

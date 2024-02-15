@@ -24,6 +24,7 @@ export async function POST(request: Request) {
 
         await page.setCookie({
             name: "phpbb3_enlax_sid",
+            // @ts-ignore
             value: account.sid,
             domain: ".lssd.gtaw.me"
         })

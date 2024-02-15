@@ -3,7 +3,7 @@ import {Control, UseFormRegister} from "react-hook-form";
 import TextField from "@/components/templates/elements/TextField";
 import {User} from "@/types/users/user";
 
-export type FieldTypes = "TextField" | "SelectField" | "TextArea"
+export type FieldTypes = "TextField"
 
 export type Template = {
     id: string,
@@ -49,7 +49,7 @@ export type FormElementInstance = {
     extraAttributes?: Record<string, any>;
 };
 
-type FormElementsType = Record<FieldTypes, FormElement>;
+type FormElementsType = Record<FieldTypes, FormElement<any>>;
 
 export const Fields: FormElementsType = {
     TextField: TextField,
