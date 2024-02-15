@@ -1,9 +1,11 @@
 "use client";
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 
 import {ColorSchemeScript, createTheme, MantineProvider} from '@mantine/core';
 import Providers from "@/utils/components/Providers";
 import React from "react";
+import {Notifications} from "@mantine/notifications";
 
 
 export default async function RootLayout({children}: {
@@ -22,11 +24,12 @@ export default async function RootLayout({children}: {
         <html lang="en">
         <head>
             <title>Почта</title>
-            <ColorSchemeScript/>
         </head>
         <body>
-
+        <ColorSchemeScript defaultColorScheme={"dark"}/>
             <MantineProvider theme={theme} defaultColorScheme={"dark"}>
+
+                <Notifications/>
                 <Providers>{children}</Providers>
             </MantineProvider>
         </body>

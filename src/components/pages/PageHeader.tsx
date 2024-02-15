@@ -1,7 +1,8 @@
 import React from "react"
+import {Text} from "@mantine/core";
 
 export const PageHeader:React.FC<React.PropsWithChildren> = ({children}) => {
     return (
-        <h2 style={{margin: "1rem 0 0 0"}}>{children}</h2>
+        <Text fz={25} fw={700} style={{margin: "1rem 0 0 0"}}>{children}</Text>
     )
 }

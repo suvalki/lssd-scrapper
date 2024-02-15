@@ -6,6 +6,7 @@ import {NavigationLink} from "@/components/navigation/helpers/NavigationLink";
 import {UserMenu} from "@/components/navigation/helpers/UserMenu";
 import {usePathname} from "next/navigation";
 import {useMediaQuery} from "@mantine/hooks";
+import {useUser} from "@/stores/User";
 
 
 export const MainNavbar: React.FC = () => {
@@ -14,9 +15,12 @@ export const MainNavbar: React.FC = () => {
 
     const match = useMediaQuery("( max-width: 992px )");
 
+    const {can} = useUser()
+
     const menuItems = {
         send: "Отправить письмо",
         templates: "Мои шаблоны",
+        admin: "Админ-панель"
     }
 
     return (
@@ -38,7 +42,7 @@ export const MainNavbar: React.FC = () => {
                         gap={"0.5rem"}
                     >
                         {Object.entries(menuItems).map(([key, value]) => (
-                            <NavigationLink key={key} title={value} link={`/${key}`} active={pathName == `/${key}`}/>
+                            can(`${key}.access`) && <NavigationLink key={key} title={value} link={`/${key}`} active={pathName.includes(`/${key}`)}/>
                         ))}
                     </Flex>}
 

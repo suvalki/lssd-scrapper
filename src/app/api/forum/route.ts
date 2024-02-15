@@ -3,60 +3,57 @@ import puppeteer from "puppeteer";
 
 import {noTemplateFormSchema} from "@/schemas/send-forms";
 import {InferType} from "yup";
+import {userAccess} from "@/utils/access-control/access-api";
+import {checkForumUser} from "@/libs/forum-libs/check-user";
 
 export async function POST(request: Request) {
-    const data = (await request.json() as InferType<typeof noTemplateFormSchema>);
-    try {
-        await noTemplateFormSchema.validateSync(data)
-    } catch (e) {
-        return NextResponse.json({error: e});
+    const user = await userAccess()
+    const body = await request.json()
+
+    if (user && body) {
+
+        // @ts-ignore
+        const account = await checkForumUser(user)
+
+        const browser = await puppeteer.launch({
+            args: ["--no-sandbox"]
+        });
+        const page = await browser.newPage();
+
+        // await page.goto("https://lssd.gtaw.me/ucp.php?mode=login&redirect=index.php");
+
+        await page.setCookie({
+            name: "phpbb3_enlax_sid",
+            value: account.sid,
+            domain: ".lssd.gtaw.me"
+        })
+
+        await page.goto("https://lssd.gtaw.me/ucp.php?i=pm&mode=compose");
+
+        if (await page.evaluate(el => el && el.textContent, await page.$('.header-profile > a > .username-coloured'))) {
+            await page.locator("textarea[name='username_list']").fill(body.recipients)
+            await page.locator("input[name='add_to']").click()
+
+            await page.waitForNavigation()
+
+            if (await page.evaluate(el => el && el.textContent, await page.$('.error'))) {
+                return NextResponse.json({error: "Recipient not found"}, {
+                    status: 404
+                });
+            }
+
+            await page.locator("input[name='subject']").fill(body.subject)
+            await page.locator("textarea[name='message']").fill(body.message)
+
+            await page.locator("input[name='post']").click()
+
+            await page.waitForNavigation()
+
+            return NextResponse.json({success: "Message sent"});
+        }
     }
-
-
-    const browser = await puppeteer.launch({
-        args: ["--no-sandbox"]
+    return NextResponse.json({error: "Forbidden"}, {
+        status: 403
     });
-    const page = await browser.newPage();
-
-    await page.goto("https://lssd.gtaw.me/ucp.php?mode=login&redirect=index.php");
-    await page.locator("[name='username']").fill("William Foger")
-    await page.locator("[name='password']").fill("19112007lL")
-    await page.locator("[name='autologin']").click()
-
-    await page.locator("[name='login']").click()
-
-    await page.waitForNavigation()
-
-    // await page.setCookie({
-    //     name: "phpbb3_enlax_sid",
-    //     value: "7305d73f232b02af7f3f61d2cbe5b97f",
-    //     domain: ".lssd.gtaw.me"
-    // })
-
-    await page.goto("https://lssd.gtaw.me/")
-
-    // await page.waitForNavigation()
-
-    console.log(await page.cookies())
-
-    await page.screenshot({
-        path: "screen.png",
-        fullPage: true
-    })
-
-    if (await page.evaluate(el => el && el.textContent, await page.$('.header-profile > a > .username-coloured'))) {
-        await page.goto("https://lssd.gtaw.me/ucp.php?i=pm&mode=compose")
-        await page.locator("[name='username_list']").fill(data.recipients)
-        await page.locator("[name='add_to']").click()
-        await page.locator("[name='subject']").fill(data.subject)
-        await page.locator("[name='message']").fill(data.message)
-        await page.locator("[name='post']").click()
-
-        await page.waitForNavigation()
-
-        return NextResponse.json({code: 200});
-    } else {
-        return NextResponse.json({error: "User not Auth", code: 403});
-    }
 
 }

@@ -5,10 +5,21 @@ import {useState} from "react";
 import LoginForm from "@/blocks/forms/login-forms/LoginForm";
 import {Mail} from "lucide-react";
 import InviteForm from "@/blocks/forms/login-forms/InviteForm";
+import {hasCookie} from "cookies-next";
+import {useRouter} from "next/navigation";
+
 
 export default function Page() {
 
     const [value, setValue] = useState("login")
+    const router = useRouter()
+
+    if (hasCookie("token")) {
+
+        if (typeof window !== 'undefined') {
+            router.push('/send')
+        }
+    }
 
     return (
         <main>

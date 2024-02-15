@@ -7,6 +7,8 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import {noTemplateFormSchema} from "@/schemas/send-forms";
 import {InferType} from "yup";
 import {Whisper} from "next/dist/compiled/@next/font/dist/google";
+import {notifications} from "@mantine/notifications";
+import {AxiosError} from "axios/index";
 
 export default function NoTemplateForm()  {
 
@@ -15,10 +17,29 @@ export default function NoTemplateForm()  {
         mutationFn: async (values: InferType<typeof noTemplateFormSchema>) => await fetch("/api/forum", {
             method: "POST",
             body: JSON.stringify(values)
-        })
+        }),
+        onSuccess: () => {
+            notifications.show({
+                title: "Успешно",
+                message: "Сообщение успешно отправлено",
+                color: "green",
+            })
+        },
+        onError: (data: AxiosError) => {
+            if (data.response?.status == 404) {
+                notifications.show({
+                    title: "Ошибка",
+                    message: "Получатель не найден",
+                    color: "red",
+                })
+                setError("recipients", {
+                    message: "Получатель не найден"
+                })
+            }
+        }
     })
 
-    const {register, handleSubmit, formState: {errors}} = useForm({
+    const {register, handleSubmit, formState: {errors}, setError} = useForm({
         resolver: yupResolver(noTemplateFormSchema)
     })
 

@@ -3,6 +3,7 @@ import React from "react"
 
 import '@mantine/core/styles.css';
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {ModalsProvider} from "@mantine/modals";
 
 
 export default function Providers({children}: { children: React.ReactNode }) {
@@ -10,9 +11,9 @@ export default function Providers({children}: { children: React.ReactNode }) {
     return (
         <>
             <QueryClientProvider client={queryClient}>
-
+                <ModalsProvider>
                     {children}
-
+                </ModalsProvider>
             </QueryClientProvider>
         </>
     )

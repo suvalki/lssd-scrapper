@@ -1,5 +1,7 @@
-import React from "react"
+"use client";
+import {useRouter} from "next/navigation";
 
-export default function Page(){
-    return (<>123</>)
+export default function Page() {
+    const router = useRouter()
+    router.push("/admin/invites")
 }

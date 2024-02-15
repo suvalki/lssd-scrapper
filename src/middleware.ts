@@ -6,7 +6,7 @@ import {hasProtectedRouter, routerParser} from "@/libs/routes-handlers/router-pa
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
     if (!request.cookies.has("token") && hasProtectedRouter(request.nextUrl.pathname, protectedAuthRoutes) && routerParser(request.nextUrl.pathname, protectedAuthRoutes)[0].deny) return NextResponse.redirect(new URL("/login", request.url))
-
+    if (request.cookies.has("token") && request.nextUrl.pathname === "/login") return NextResponse.redirect(new URL("/send", request.url))
     return NextResponse.next()
 }
 

@@ -1,9 +1,33 @@
 "use client";
 import React, {HTMLAttributes} from "react"
-import {Avatar, Flex, Menu} from "@mantine/core";
-import {ChevronLeft} from "lucide-react";
+import {ActionIcon, Avatar, Flex, Menu} from "@mantine/core";
+import {Check} from "lucide-react";
+import {useRouter} from "next/navigation";
+import {useUser} from "@/stores/User";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import axios from "axios";
+import {deleteCookie} from "cookies-next";
 
 export const UserMenu: React.FC<HTMLAttributes<HTMLDivElement>> = ({...props}) => {
+
+    const router = useRouter()
+
+    const {user, logout} = useUser()
+
+    const queryClient = useQueryClient()
+
+    const switchAccountActive = useMutation({
+        mutationKey: ["forum-accounts-swich-active"],
+        mutationFn: async ({id}: { id: number }) => await axios.put(`/api/forum-accounts/switch`, {
+            id: id,
+        }),
+        onSuccess: (data, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: ["me"]
+            })
+        }
+    })
+
     return <>
         {/*@ts-ignore*/}
         <Menu {...props}>
@@ -14,7 +38,7 @@ export const UserMenu: React.FC<HTMLAttributes<HTMLDivElement>> = ({...props}) =
                     style={{
                         cursor: "pointer",
                     }}>
-                    <span>Admin</span>
+                    <span>{user?.name}</span>
                     <Avatar>A</Avatar>
                 </Flex>
             </Menu.Target>
@@ -22,10 +46,19 @@ export const UserMenu: React.FC<HTMLAttributes<HTMLDivElement>> = ({...props}) =
                 <Menu.Label>Профиль Admin</Menu.Label>
                 <Menu.Divider/>
                 <Menu.Label>Форумный аккаунт</Menu.Label>
-                <Menu.Item leftSection={<ChevronLeft size={20}/>}>Test Account</Menu.Item>
+                {user?.forumAccounts?.map(account =>
+                    <Menu.Item key={account.id} rightSection={account.active &&
+                        <ActionIcon color={"green"} variant={"transparent"} size={"xs"}><Check size={18}/></ActionIcon>}
+                               onClick={() => !account.active && switchAccountActive.mutate({id: account.id})}>{account.login}</Menu.Item>
+                )}
+
                 <Menu.Divider/>
-                <Menu.Item>Настройки</Menu.Item>
-                <Menu.Item>Выйти</Menu.Item>
+                <Menu.Item onClick={() => router.push("/settings")}>Настройки</Menu.Item>
+                <Menu.Item onClick={() => {
+                    deleteCookie("token")
+                    logout()
+                    router.push("/")
+                }}>Выйти</Menu.Item>
             </Menu.Dropdown>
         </Menu>
     </>
