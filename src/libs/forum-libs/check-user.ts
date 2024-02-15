@@ -34,8 +34,19 @@ export const checkForumUser = async (user: User) => {
                     domain: ".lssd.gtaw.me"
                 })
 
+                await page.setRequestInterception(true);
 
-                await page.goto("https://lssd.gtaw.me/index.php");
+                // Intercept requests and block certain resource types
+                page.on('request', (req) => {
+                    if (req.resourceType() === 'stylesheet' || req.resourceType() === 'font' || req.resourceType() === 'image') {
+                        req.abort();
+                    } else {
+                        req.continue();
+                    }
+                });
+
+
+                await page.goto("https://lssd.gtaw.me/index.php",{ waitUntil: 'domcontentloaded' });
 
                 if (await page.evaluate(el => el && el.textContent, await page.$('.header-profile > a > .username-coloured'))) {
 
@@ -44,7 +55,7 @@ export const checkForumUser = async (user: User) => {
 
                     return active
                 } else {
-                    await page.goto("https://lssd.gtaw.me/ucp.php?mode=login&redirect=index.php");
+                    await page.goto("https://lssd.gtaw.me/ucp.php?mode=login&redirect=index.php", { waitUntil: 'domcontentloaded' });
 
                     await page.locator('input[name="username"]').fill(active.login)
                     await page.locator('input[name="password"]').fill(active.password)
@@ -99,7 +110,18 @@ export const checkForumAccount = async (login: string, password: string) => {
     try{
         const page = await browser.newPage();
 
-        await page.goto("https://lssd.gtaw.me/ucp.php?mode=login&redirect=index.php");
+        await page.setRequestInterception(true);
+
+        // Intercept requests and block certain resource types
+        page.on('request', (req) => {
+            if (req.resourceType() === 'stylesheet' || req.resourceType() === 'font' || req.resourceType() === 'image') {
+                req.abort();
+            } else {
+                req.continue();
+            }
+        });
+
+        await page.goto("https://lssd.gtaw.me/ucp.php?mode=login&redirect=index.php", { waitUntil: 'domcontentloaded' });
 
         await page.locator('input[name="username"]').fill(login)
         await page.locator('input[name="password"]').fill(password)

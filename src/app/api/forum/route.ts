@@ -23,6 +23,17 @@ export async function POST(request: Request) {
 
             await page.setDefaultNavigationTimeout(120000);
 
+            await page.setRequestInterception(true);
+
+            // Intercept requests and block certain resource types
+            page.on('request', (req) => {
+                if (req.resourceType() === 'stylesheet' || req.resourceType() === 'font' || req.resourceType() === 'image') {
+                    req.abort();
+                } else {
+                    req.continue();
+                }
+            });
+
             await page.setCookie({
                 name: "phpbb3_enlax_sid",
                 // @ts-ignore
@@ -30,7 +41,7 @@ export async function POST(request: Request) {
                 domain: ".lssd.gtaw.me"
             })
 
-            await page.goto("https://lssd.gtaw.me/ucp.php?i=pm&mode=compose");
+            await page.goto("https://lssd.gtaw.me/ucp.php?i=pm&mode=compose", { waitUntil: 'domcontentloaded' });
 
             if (await page.evaluate(el => el && el.textContent, await page.$('.header-profile > a > .username-coloured'))) {
                 await page.locator("textarea[name='username_list']").fill(body.recipients)
