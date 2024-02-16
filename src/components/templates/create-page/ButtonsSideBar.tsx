@@ -23,6 +23,10 @@ export default function ButtonsSideBar() {
                                        onClick={() => addElement(Fields.TextField.construct(
                                            (Math.random() * 100000).toFixed().toString()
                                        ))}/>
+                        <ElementButton element={Fields.TextArea}
+                                       onClick={() => addElement(Fields.TextArea.construct(
+                                           (Math.random() * 100000).toFixed().toString()
+                                       ))}/>
                     </Grid.Col>
                 </Grid>
             </div>

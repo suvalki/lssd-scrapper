@@ -1,7 +1,7 @@
 "use client";
 import {FormElement, FormElementInstance} from "@/types/templates/template";
 import {TextIcon} from "lucide-react";
-import {Center, Checkbox, Grid, Group, TextInput} from "@mantine/core";
+import {Center, Checkbox, Grid, Group, Textarea, TextInput} from "@mantine/core";
 import React, {HTMLProps} from "react";
 import {Control, UseFormRegister} from "react-hook-form";
 
@@ -11,15 +11,15 @@ function DesignElement ({instance}: { instance: FormElementInstance }) {
     </>
 }
 
-function FormElement ({instance, value, onChange, ...props}: { instance: FormElementInstance } & HTMLProps<typeof TextInput>) {
+function FormElement ({instance, value, onChange, ...props}: { instance: FormElementInstance } & HTMLProps<typeof Textarea>) {
     return <>
-        <TextInput {...instance.extraAttributes}
+        <Textarea {...instance.extraAttributes}
                    id={instance.uid}
                    // @ts-ignore
                    onChange={onChange}
                    value={value}
                    w={"100%"}
-                   {...props} />
+                   {...props}/>
     </>
 }
 
@@ -42,27 +42,31 @@ function PropertiesElement ({instance, register, control}: { instance: FormEleme
                 <Grid.Col span={1}>
                     <Checkbox label={"Отключено"} {...register("disabled")} />
                 </Grid.Col>
+                <Grid.Col span={1}>
+                    <Checkbox label={"Растягиваемое"} {...register("autosize")} />
+                </Grid.Col>
             </Grid>
         </form>
     </>
 }
 
-const TextField:FormElement<typeof TextInput> = {
-        type: "TextField",
+const TextArea:FormElement<typeof Textarea> = {
+        type: "TextArea",
         designBtnElement: {
             icon: () => <TextIcon/>,
-            label: "Текст",
+            label: "Текст. Зона",
         },
         construct: (id: string) => {
             return {
                 uid: id,
-                type: "TextField",
+                type: "TextArea",
                 extraAttributes: {
-                    label: "Текстовое поле",
+                    label: "Текстовая зона",
                     defaultValue: "",
                     description: "",
                     required: true,
                     disabled: false,
+                    autosize: true
                 },
             }
         },
@@ -71,11 +75,11 @@ const TextField:FormElement<typeof TextInput> = {
         propertiesElement: PropertiesElement,
         getValues: (instance, value) => {
             return {
-                label: "Текстовое поле",
+                label: "Текстовая зона",
                 value: () => <></>,
                 rawValue: value || "",
             }
         },
     }
 
-    export default TextField
+    export default TextArea

@@ -2,8 +2,9 @@ import {HTMLProps} from "react";
 import {Control, UseFormRegister} from "react-hook-form";
 import TextField from "@/components/templates/elements/TextField";
 import {User} from "@/types/users/user";
+import TextArea from "@/components/templates/elements/TextArea";
 
-export type FieldTypes = "TextField"
+export type FieldTypes = "TextField" | "TextArea"
 
 export type Template = {
     id: string,
@@ -53,6 +54,7 @@ type FormElementsType = Record<FieldTypes, FormElement<any>>;
 
 export const Fields: FormElementsType = {
     TextField: TextField,
+    TextArea: TextArea
     // TextAreaField: TextAreaField,
     // SelectField: SelectField,
 };
