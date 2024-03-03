@@ -7,6 +7,7 @@ export default function TemplateCard({name, description, link}: { name: string, 
 
     const router = useRouter()
 
+
     return (
         <Card onClick={() => router.push(link)} style={{
             cursor: "pointer"

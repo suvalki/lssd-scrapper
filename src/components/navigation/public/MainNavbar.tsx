@@ -19,8 +19,9 @@ export const MainNavbar: React.FC = () => {
 
     const menuItems = {
         send: "Отправить письмо",
+        topics: "Отслеживаемые темы",
         templates: "Мои шаблоны",
-        admin: "Админ-панель"
+        admin: "Админ-панель",
     }
 
     return (

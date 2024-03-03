@@ -11,6 +11,8 @@ export async function POST(request: Request) {
     });
     try {
         if (user && body) {
+            const start = (new Date()).getSeconds()
+
 
 
             // @ts-ignore
@@ -18,6 +20,7 @@ export async function POST(request: Request) {
 
 
             const page = await browser.newPage();
+
 
             // await page.goto("https://lssd.gtaw.me/ucp.php?mode=login&redirect=index.php");
 
@@ -41,44 +44,45 @@ export async function POST(request: Request) {
                 domain: ".lssd.gtaw.me"
             })
 
-            await page.goto("https://lssd.gtaw.me/ucp.php?i=pm&mode=compose", { waitUntil: 'domcontentloaded' });
+            await page.goto("https://lssd.gtaw.me/ucp.php?i=pm&mode=compose", {waitUntil: 'domcontentloaded'});
 
-            if (await page.evaluate(el => el && el.textContent, await page.$('.header-profile > a > .username-coloured'))) {
-                await page.locator("textarea[name='username_list']").fill(body.recipients)
-                await page.locator("input[name='add_to']").click()
 
-                await page.waitForNavigation()
+            await page.locator("textarea[name='username_list']").fill(body.recipients)
+            await page.locator("input[name='add_to']").click()
 
-                if (await page.evaluate(el => el && el.textContent, await page.$('.error'))) {
+            await page.waitForSelector("input[name='subject']")
 
-                    await browser.close()
-                    await browser.disconnect()
-
-                    return NextResponse.json({error: "Recipient not found"}, {
-                        status: 404
-                    });
-                }
-
-                await page.locator("input[name='subject']").fill(body.subject)
-                await page.locator("textarea[name='message']").fill(body.message)
-
-                await page.locator("input[name='post']").click()
-
-                await page.waitForNavigation()
+            if (await page.evaluate(el => el && el.textContent, await page.$('.error'))) {
 
                 await browser.close()
                 await browser.disconnect()
 
-                return NextResponse.json({success: "Message sent"});
+                console.log(`couple time - ${(start - (new Date()).getSeconds())* -1} sec`)
+
+                return NextResponse.json({error: "Recipient not found"}, {
+                    status: 404
+                });
             }
+
+            await page.locator("input[name='subject']").fill(body.subject)
+            await page.locator("textarea[name='message']").fill(body.message)
+
+            await page.locator("input[name='post']").click()
+
+            await page.waitForSelector(".header-profile > a")
+
+            await browser.close()
+            await browser.disconnect()
+
+            console.log(`couple time - ${(start - (new Date()).getSeconds())* -1} sec`)
+
+            return NextResponse.json({success: "Message sent"});
         }
-    }
-    catch (e) {
+    } catch (e) {
         console.log(e)
         await browser.close()
         await browser.disconnect()
-    }
-    finally {
+    } finally {
         await browser.close()
         await browser.disconnect()
     }

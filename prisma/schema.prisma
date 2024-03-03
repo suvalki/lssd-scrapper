@@ -18,7 +18,7 @@ model User {
   invitesCreated   InviteCode[]   @relation("createdInvite")
   activeInvite     InviteCode?    @relation("activeInvite")
   templatesCreated Template[]
-  forumFields      ForumFields[]  @relation("forumFields")
+  topics           Topic[]        @relation("topics")
   role             Role           @relation(fields: [roleId], references: [id])
 
   @@index([roleId])
@@ -35,9 +35,9 @@ model Role {
   id          Int          @id @default(autoincrement())
   name        String       @unique
   createdAt   DateTime     @default(now())
+  InviteCodes InviteCode[] @relation("roleId")
   users       User[]
   permissions Permission[] @relation("PermissionToRole")
-  InviteCodes InviteCode[] @relation("roleId")
 }
 
 model InviteCode {
@@ -71,13 +71,29 @@ model ForumAccount {
   createdId Int
   active    Boolean
   sid       String
+  lastCheck DateTime @default(now())
   createdAt DateTime @default(now())
   created   User     @relation(fields: [createdId], references: [id], onDelete: Cascade)
 }
 
-model ForumFields {
-  id       Int    @id @default(autoincrement())
-  user     User   @relation(fields: [userId], references: [id], name: "forumFields", onDelete: Cascade)
-  userId   Int
-  elements String
+model Topic {
+  id               Int      @id @default(autoincrement())
+  topicId          String
+  name             String
+  pages            Int
+  forumUserCreated String
+  answers          Int
+  createdId        Int
+  createdAt        DateTime @default(now())
+  topicAnswers     Answer[] @relation("answers")
+  created          User     @relation("topics", fields: [createdId], references: [id], onDelete: Cascade)
+}
+
+model Answer {
+  id            Int      @id @default(autoincrement())
+  topicId       Int
+  createdAt     DateTime @default(now())
+  answerForumId String
+  name          String
+  topic         Topic    @relation("answers", fields: [topicId], references: [id])
 }

@@ -1,0 +1,7 @@
+-- CreateTable
+CREATE TABLE "ForumFields" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "userId" INTEGER NOT NULL,
+    "elements" TEXT NOT NULL,
+    CONSTRAINT "ForumFields_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);

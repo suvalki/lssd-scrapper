@@ -93,7 +93,6 @@ export default function TemplateForm() {
 
         const code = codeReplacer(data)
 
-        console.log(code)
 
         mutate({
             message: code,

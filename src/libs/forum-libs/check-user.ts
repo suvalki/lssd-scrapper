@@ -17,9 +17,10 @@ export const checkForumUser = async (user: User) => {
     const browser = await puppeteer.launch({
         args: ["--no-sandbox"]
     })
-    try{
+    try {
         if (accounts) {
             const active = accounts.forumAccounts.filter(account => account.active)[0]
+
             if (active) {
 
 
@@ -27,12 +28,15 @@ export const checkForumUser = async (user: User) => {
 
                 await page.setDefaultNavigationTimeout(120000);
 
+
                 await page.setCookie({
                     name: "phpbb3_enlax_sid",
                     // @ts-ignore
                     value: active.sid,
                     domain: ".lssd.gtaw.me"
                 })
+
+                console.log("Logged in 1")
 
                 await page.setRequestInterception(true);
 
@@ -46,16 +50,28 @@ export const checkForumUser = async (user: User) => {
                 });
 
 
-                await page.goto("https://lssd.gtaw.me/index.php",{ waitUntil: 'domcontentloaded' });
 
-                if (await page.evaluate(el => el && el.textContent, await page.$('.header-profile > a > .username-coloured'))) {
+                await page.goto("\n" +
+                    "https://lssd.gtaw.me/ucp.php?i=ucp_attachments&mode=attachments", {waitUntil: 'domcontentloaded'});
+
+
+                if (await page.evaluate(el => el && el.textContent, await page.$('.header-profile > a'))) {
+
 
                     await browser.close()
                     await browser.disconnect()
 
+
                     return active
+
+
                 } else {
-                    await page.goto("https://lssd.gtaw.me/ucp.php?mode=login&redirect=index.php", { waitUntil: 'domcontentloaded' });
+                    await page.goto("https://lssd.gtaw.me/ucp.php?mode=login&redirect=index.php", {waitUntil: 'domcontentloaded'});
+                    console.log("Goto login")
+                    console.log(active)
+                    await page.screenshot({
+                        path: 'screenshot.png',
+                    })
 
                     await page.locator('input[name="username"]').fill(active.login)
                     await page.locator('input[name="password"]').fill(active.password)
@@ -65,15 +81,17 @@ export const checkForumUser = async (user: User) => {
 
                     await page.waitForNavigation()
 
-                    if (await page.evaluate(el => el && el.textContent, await page.$('.header-profile > a > .username-coloured'))) {
+
+                    if (await page.evaluate(el => el && el.textContent, await page.$('.header-profile > a'))) {
                         const cookie = await page.cookies()
+                        
                         const account = await prisma.forumAccount.update({
                             where: {
                                 id: active.id
                             },
                             data: {
                                 // @ts-ignore
-                                sid: cookie.filter((el) => el.name === "phpbb3_enlax_sid")[0].value
+                                sid: cookie.filter((el) => el.name === "phpbb3_enlax_sid")[0].value,
                             }
                         })
 
@@ -87,13 +105,11 @@ export const checkForumUser = async (user: User) => {
 
         }
 
-    }
-    catch (e) {
+    } catch (e) {
         console.log(e)
         await browser.close()
         await browser.disconnect()
-    }
-    finally {
+    } finally {
         await browser.close()
         await browser.disconnect()
     }
@@ -107,7 +123,7 @@ export const checkForumAccount = async (login: string, password: string) => {
         args: ["--no-sandbox"]
     })
 
-    try{
+    try {
         const page = await browser.newPage();
 
         await page.setRequestInterception(true);
@@ -121,7 +137,7 @@ export const checkForumAccount = async (login: string, password: string) => {
             }
         });
 
-        await page.goto("https://lssd.gtaw.me/ucp.php?mode=login&redirect=index.php", { waitUntil: 'domcontentloaded' });
+        await page.goto("https://lssd.gtaw.me/ucp.php?mode=login&redirect=index.php", {waitUntil: 'domcontentloaded'});
 
         await page.locator('input[name="username"]').fill(login)
         await page.locator('input[name="password"]').fill(password)
@@ -131,7 +147,7 @@ export const checkForumAccount = async (login: string, password: string) => {
 
         await page.waitForNavigation()
 
-        if (await page.evaluate(el => el && el.textContent, await page.$('.header-profile > a > .username-coloured'))) {
+        if (await page.evaluate(el => el && el.textContent, await page.$('.header-profile > a'))) {
 
             const cookie = (await page.cookies()).filter((el) => el.name === "phpbb3_enlax_sid")[0].value
             await browser.close()
@@ -140,15 +156,16 @@ export const checkForumAccount = async (login: string, password: string) => {
 
         }
         await browser.close()
+        await browser.disconnect()
         return false
-    }
-    catch (e) {
+    } catch (e) {
         console.log(e)
         await browser.close()
+        await browser.disconnect()
 
-    }
-    finally {
+    } finally {
         await browser.close()
+        await browser.disconnect()
     }
     return false
 }
