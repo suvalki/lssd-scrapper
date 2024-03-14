@@ -87,7 +87,7 @@ export default function AnswerForm({
     const fields = {
       ...JSON.parse(
         // @ts-ignore
-        user?.templatesCreated.filter(
+        user?.templates.filter(
           (template) => Number(template.id) === Number(values.template)
         )[0].elements
       )
@@ -104,7 +104,7 @@ export default function AnswerForm({
 
     const code = replacer({
       // @ts-ignore
-      content: user?.templatesCreated.filter(
+      content: user?.templates.filter(
         (template) => Number(template.id) === Number(values.template)
       )[0].code,
       data: {
@@ -158,7 +158,7 @@ export default function AnswerForm({
           key != "template" &&
           !JSON.parse(
             // @ts-ignore
-            user?.templatesCreated.filter(
+            user?.templates.filter(
               (template) => Number(template.id) === Number(values.template)
             )[0].elements
           ).some((el: FormElementInstance) => `${el.uid}-field` == key)
@@ -204,8 +204,8 @@ export default function AnswerForm({
                     w={"100%"}
                     placeholder={"Выберите шаблон"}
                     data={
-                      user?.templatesCreated && [
-                        ...user?.templatesCreated?.map((template) => ({
+                      user?.templates && [
+                        ...user?.templates?.map((template) => ({
                           value: String(template.id),
                           label: template.name,
                         })),
@@ -237,7 +237,7 @@ export default function AnswerForm({
                   <Grid columns={!match ? 2 : 1} grow>
                     {JSON.parse(
                       // @ts-ignore
-                      user?.templatesCreated.filter(
+                      user?.templates.filter(
                         (template) =>
                           Number(template.id) === Number(values.template)
                       )[0].elements

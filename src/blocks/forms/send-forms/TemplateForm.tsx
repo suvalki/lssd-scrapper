@@ -51,7 +51,7 @@ export default function TemplateForm() {
     const codeReplacer = (data: Record<string, string>) => {
         const fields = {
             // @ts-ignore
-            ...JSON.parse(user?.templatesCreated.filter((template) => Number(template.id) === Number(values.template))[0].elements).map((element: FormElementInstance) => {
+            ...JSON.parse(user?.templates.filter((template) => Number(template.id) === Number(values.template))[0].elements).map((element: FormElementInstance) => {
                 const field: {} = {};
                 // @ts-ignore
                 field[element.uid as keyof typeof field] = Fields[
@@ -67,7 +67,7 @@ export default function TemplateForm() {
 
         const code = replacer({
             // @ts-ignore
-            content: user?.templatesCreated.filter((template) => Number(template.id) === Number(values.template))[0].code,
+            content: user?.templates.filter((template) => Number(template.id) === Number(values.template))[0].code,
             data: {
                 ...fields,
                 date: {
@@ -128,7 +128,7 @@ export default function TemplateForm() {
             Object.keys(values).forEach((key) => {
                 if (key != "template" && key != "recipients" && key != "subject" &&
                     // @ts-ignore
-                    !JSON.parse(user?.templatesCreated.filter((template) => Number(template.id) === Number(values.template))[0].elements)
+                    !JSON.parse(user?.templates.filter((template) => Number(template.id) === Number(values.template))[0].elements)
                         .some((el: FormElementInstance) => `${el.uid}-field` == key)) {
                     unregister(key)
                 }

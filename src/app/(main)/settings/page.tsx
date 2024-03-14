@@ -23,7 +23,7 @@ export default function Page() {
                 <InfoCard value={user?.activeInvite?.created?.name} title={"Приглашен"} icon={<Key/>}/>
                 <InfoCard value={user?.role.name} title={"Роль"} icon={<UserIcon/>}/>
                 <InfoCard value={user?.forumAccounts.length} title={"Аккаунтов"} icon={<Users2/>}/>
-                <InfoCard value={user?.templatesCreated.length} title={"Шаблонов"} icon={<NewspaperIcon/>}/>
+                <InfoCard value={user?.templates.filter((template) => template.created.id == user.id).length} title={"Шаблонов"} icon={<NewspaperIcon/>}/>
             </Flex>
             <Grid columns={2} mt={20}>
                 <Grid.Col span={{
