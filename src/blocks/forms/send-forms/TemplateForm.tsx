@@ -141,7 +141,7 @@ export default function TemplateForm() {
             <Controller render={({field}) =>
                 <Select label="Шаблон" w={"100%"} placeholder={"Выберите шаблон"}
                         data={
-                            user?.templatesCreated && [...user?.templatesCreated?.map((template) => ({
+                            user?.templates && [...user?.templates?.map((template) => ({
                                 value: String(template.id),
                                 label: template.name
                             }))]
@@ -165,7 +165,7 @@ export default function TemplateForm() {
                     <Divider mt={10}/>
                     <Grid columns={!match ? 2 : 1} grow>
                         {/*@ts-ignore*/}
-                        {JSON.parse(user?.templatesCreated.filter((template) => Number(template.id) === Number(values.template))[0].elements).map((el: FormElementInstance) => {
+                        {JSON.parse(user?.templates.filter((template) => Number(template.id) === Number(values.template))[0].elements).map((el: FormElementInstance) => {
                             return (
                                 <Grid.Col key={el.uid} span={1}>
                                     <Controller render={({field}) =>

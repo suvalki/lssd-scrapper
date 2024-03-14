@@ -10,7 +10,7 @@ export type User = {
     role: Role,
     activeInvite?: InviteCode,
     invitesCreated: InviteCode[],
-    templatesCreated: Template[],
+    templates: Template[],
     forumAccounts: ForumAccount[],
     createdAt: Date
 }

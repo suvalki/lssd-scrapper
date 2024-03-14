@@ -29,7 +29,7 @@ export default function Page() {
 
             <Grid columns={2} mt={20}>
 
-                {user?.templatesCreated.length == 0 &&
+                {user?.templates.filter((template) => template.created.id == user.id).length == 0 &&
                     <Flex justify={"center"} w={"100%"} mt={20}>
                         <Stack gap={2} align={"center"}>
                             <ThemeIcon variant={"transparent"} opacity={0.5} color={"white"} size={60}><Shapes
@@ -39,7 +39,7 @@ export default function Page() {
                     </Flex>}
 
 
-                {user?.templatesCreated.filter((template) => template.name.toLowerCase().includes(search.toLowerCase()) || template.description.toLowerCase().includes(search.toLowerCase())).slice((page - 1) * 10, page * 10).map((template) => (
+                {user?.templates.filter((template) => template.created.id == user.id).filter((template) => template.name.toLowerCase().includes(search.toLowerCase()) || template.description.toLowerCase().includes(search.toLowerCase())).slice((page - 1) * 10, page * 10).map((template) => (
                     <Grid.Col key={template.id} span={{
                         base: 2,
                         md: 1,
@@ -50,9 +50,9 @@ export default function Page() {
                 ))}
 
             </Grid>
-            {!(user?.templatesCreated.length == 0) &&
+            {!(user?.templates.filter((template) => template.created.id == user.id).length == 0) &&
                 <Flex justify={"center"} mt={40}>
-                    <Pagination total={Math.ceil((user?.templatesCreated.filter((template) => template.name.toLowerCase().includes(search.toLowerCase()) || template.description.toLowerCase().includes(search.toLowerCase())).length || 10) / 10)} value={page}
+                    <Pagination total={Math.ceil((user?.templates.filter((template) => template.created.id == user.id).filter((template) => template.name.toLowerCase().includes(search.toLowerCase()) || template.description.toLowerCase().includes(search.toLowerCase())).length || 10) / 10)} value={page}
                                 onChange={setPage}
                                 size={"sm"}/>
                 </Flex>
