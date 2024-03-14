@@ -11,10 +11,7 @@ export async function GET(req: Request) {
         const prisma = new PrismaClient()
         const templates = await prisma.template.findMany({
             where: {
-                OR: [
-                    {createdId: user.id},
-                    {forAll: true}
-                ]
+                    createdId: user.id,
             },
             orderBy: {
                 id: "desc"

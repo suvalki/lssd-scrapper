@@ -13,6 +13,12 @@ export async function GET(req: Request) {
             const token = jwt.verify(cookies().get("token")?.value, "lssd-scrapper-2024")
             if (token) {
 
+                const forAllTemplates = await prisma.template.findMany({
+                    where: {
+                        forAll: true
+                    }
+                })
+
                 const user = await prisma.user.findFirst({
                     where: {
                         id: token.id
@@ -34,7 +40,10 @@ export async function GET(req: Request) {
                     }
                 })
                 if (user) {
-                    return NextResponse.json(user)
+                    return NextResponse.json({
+                        ...user,
+                        templates: [...user.templatesCreated, ...forAllTemplates],
+                    })
                 }
 
 
