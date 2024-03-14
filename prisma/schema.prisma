@@ -61,6 +61,7 @@ model Template {
   createdId   Int
   elements    String
   createdAt   DateTime @default(now())
+  forAll      Boolean?
   created     User     @relation(fields: [createdId], references: [id], onDelete: Cascade)
 }
 

@@ -65,7 +65,8 @@ export async function POST(request: Request) {
             }
 
             await page.locator("input[name='subject']").fill(body.subject)
-            await page.locator("textarea[name='message']").fill(body.message)
+            const message = body.message
+            await page.evaluate('document.getElementsByName("message")[0].value = `' + message + '`')
 
             await page.locator("input[name='post']").click()
 

@@ -11,7 +11,10 @@ export async function GET(req: Request) {
         const prisma = new PrismaClient()
         const templates = await prisma.template.findMany({
             where: {
-                createdId: user.id
+                OR: [
+                    {createdId: user.id},
+                    {forAll: true}
+                ]
             },
             orderBy: {
                 id: "desc"
@@ -31,11 +34,15 @@ export async function POST(req: Request) {
     const user = await userAccess()
     const body = await req.json()
     if (user && body) {
+
+        const accessForAll = await userAccess("templates.forAll")
+
         const prisma = new PrismaClient()
         const template = await prisma.template.create({
                 data: {
                     createdId: user.id,
-                    ...body
+                    ...body,
+                    forAll: accessForAll ? true : false
                 },
             })
             return NextResponse.json(template)

@@ -13,7 +13,8 @@ export type Template = {
     created: User,
     elements: [],
     createdAt: Date,
-    code: string
+    code: string,
+    forAll: boolean
 }
 
 

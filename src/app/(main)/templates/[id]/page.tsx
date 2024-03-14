@@ -40,7 +40,8 @@ export default function Page({params: {id}}: { params: { id: string } }) {
             init(JSON.parse(data.data.elements), {
                 name: data.data.name,
                 code: data.data.code,
-                description: data.data.description
+                description: data.data.description,
+                forAll: data.data.forAll
             })
         }
     }, [isLoading, data])
@@ -110,14 +111,16 @@ function SaveButton() {
                 name: templateSettings.name,
                 code: templateSettings.code,
                 description: templateSettings.description,
-                elements: JSON.stringify(elements)
+                elements: JSON.stringify(elements),
+                forAll: templateSettings.forAll
             })
             else {
                 return await axios.put<Template>(`/api/templates/${id}`, {
                     name: templateSettings.name,
                     code: templateSettings.code,
                     description: templateSettings.description,
-                    elements: JSON.stringify(elements)
+                    elements: JSON.stringify(elements),
+                    forAll: templateSettings.forAll
                 })
             }
         },

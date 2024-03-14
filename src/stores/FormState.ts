@@ -6,7 +6,8 @@ type Props = {
     templateSettings: {
         name: string,
         description?: string,
-        code: string
+        code: string,
+        forAll?: boolean
     }
     addElement: (element: FormElementInstance) => void
     deleteElement: (element: FormElementInstance) => void
@@ -21,7 +22,8 @@ const FormState = create<Props>((set) => ({
     templateSettings: {
         name: "",
         description: undefined,
-        code: ""
+        code: "",
+        forAll: false
     },
     addElement: (element: FormElementInstance) => set((state: {
         elements: FormElementInstance[]
@@ -37,7 +39,7 @@ const FormState = create<Props>((set) => ({
     }),
     updateSettings: (settings: Props["templateSettings"]) => set(() => ({templateSettings: settings})),
     init: (elements: FormElementInstance[], settings: Props["templateSettings"]) => set(() => ({elements, templateSettings: settings})),
-    clear: () => set(() => ({elements: [], templateSettings: {name: "", description: "", code: ""}}))
+    clear: () => set(() => ({elements: [], templateSettings: {name: "", description: "", code: "", forAll: false}}))
 }))
 
 export const useFormState = () => FormState((state) => state)

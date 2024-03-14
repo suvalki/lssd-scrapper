@@ -9,6 +9,7 @@ export async function POST(req: Request) {
   const body = await req.json();
   const browser = await puppeteer.launch({
     args: ["--no-sandbox"],
+    timeout: 0,
   });
   try {
     if (user && body) {
@@ -35,7 +36,7 @@ export async function POST(req: Request) {
 
       const page = await browser.newPage();
 
-      await page.setDefaultNavigationTimeout(120000);
+      await page.setDefaultNavigationTimeout(2400000);
 
       await page.setRequestInterception(true);
 
@@ -63,8 +64,15 @@ export async function POST(req: Request) {
         waitUntil: "domcontentloaded",
       });
 
+      console.log(body);
 
-      await page.locator("textarea[name='message']").fill(body.message);
+
+      
+      const message = body.message
+
+      await page.evaluate('document.getElementsByName("message")[0].value = `' + message + '`')
+
+      console.log("filled")
 
       await page.locator("input[name='post']").click();
 
