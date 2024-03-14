@@ -71,6 +71,7 @@ model ForumAccount {
   password  String
   createdId Int
   active    Boolean
+  test      Boolean?
   sid       String
   lastCheck DateTime @default(now())
   createdAt DateTime @default(now())
